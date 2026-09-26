@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Create events, manage registrations, and give attendees a clear registration experience."
+    />
+    <title>Events | Event Registry</title>
+    <link rel="icon" type="image/png" href="./assets/logo.png" />
+    <link rel="stylesheet" href="./src/styles/index.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+
+    <div class="app-shell" data-app-shell data-mode="manager">
+      <aside class="sidebar" aria-label="Application sidebar" data-sidebar></aside>
+      <header class="public-header" data-public-header hidden></header>
+
+      <main class="workspace" id="content" tabindex="-1">
+        <section class="view login-view" data-view="login" aria-labelledby="login-title" hidden>
+          <div class="login-brand">
+            <span class="brand-mark" aria-hidden="true"></span>
+            <div>
+              <p class="eyebrow">Event Registry</p>
+              <h1 id="login-title">Welcome back</h1>
+              <p class="page-description">Sign in to manage your events and registrations.</p>
+            </div>
+          </div>
+
+          <form class="login-form" data-login-form>
+            <p class="form-error" role="alert" data-login-error hidden>
+              That username or password is not correct.
+            </p>
+            <div class="field">
+              <label for="login-username">Username</label>
+              <input id="login-username" name="username" type="text" autocomplete="username" required autofocus />
+            </div>
+            <div class="field">
+              <label for="login-password">Password</label>
+              <input id="login-password" name="password" type="password" autocomplete="current-password" required />
+            </div>
+            <button class="button button-primary" type="submit">Sign in</button>
+            <p class="login-note">Use the account provided for this event registry.</p>
+          </form>
+        </section>
+
+        <section class="view" data-view="events" aria-labelledby="events-title">
+          <header class="page-header">
+            <div>
+              <p class="eyebrow">Workspace</p>
+              <h1 id="events-title">Events</h1>
+              <p class="page-description">
+                Create events and keep their schedules, capacity, and status in one place.
+              </p>
+            </div>
+            <div class="page-actions">
+              <a class="button button-secondary" href="#register">
+                Preview attendee page
+              </a>
+              <button class="button button-primary" type="button" data-new-event>
+                New event
+              </button>
+            </div>
+          </header>
+
+          <div class="events-region" data-events-region aria-live="polite" aria-busy="true">
+            <ol class="event-list" data-events-list hidden></ol>
+
+            <div class="empty-state" data-events-empty hidden>
+              <span class="empty-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M7 3v3M17 3v3M4 9h16M5 5h14a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z" />
+                </svg>
+              </span>
+              <h2>No events yet</h2>
+              <p>Events you create will appear here.</p>
+            </div>
+          </div>
+
+          <noscript>
+            <p class="script-note">Enable JavaScript to load the sample event workspace.</p>
+          </noscript>
+        </section>
+
+        <section
+          class="view"
+          data-view="detail"
+          aria-labelledby="detail-title"
+          hidden
+        >
+          <header class="page-header">
+            <div>
+              <a class="back-link" href="#events">Events</a>
+              <h1 id="detail-title" data-detail-title>Event details</h1>
+              <p class="page-description" data-detail-description>
+                Review event information and manage its availability.
+              </p>
+            </div>
+          </header>
+
+          <div
+            class="detail-region"
+            data-detail-region
+            aria-live="polite"
+            aria-busy="true"
+          ></div>
+        </section>
+
+        <section class="view" data-view="editor" aria-labelledby="editor-title" hidden>
+          <header class="page-header">
+            <div>
+              <a class="back-link" href="#events">Events</a>
+              <h1 id="editor-title" data-editor-title>Create event</h1>
+              <p class="page-description" data-editor-description>
+                Add the details attendees need before opening registration.
+              </p>
+            </div>
+          </header>
+
+          <form class="event-form" data-event-form novalidate>
+            <p class="form-error" role="alert" data-form-error hidden></p>
+
+            <section class="form-section" aria-labelledby="details-title">
+              <div class="form-heading">
+                <h2 id="details-title">Details</h2>
+                <p>Name the event and explain what attendees can expect.</p>
+              </div>
+
+              <div class="form-fields">
+                <div class="field">
+                  <label for="event-title">Title</label>
+                  <input
+                    id="event-title"
+                    name="title"
+                    type="text"
+                    maxlength="80"
+                    aria-describedby="event-title-error"
+                    required
+                  />
+                  <p class="field-error" id="event-title-error" data-error-for="title" hidden></p>
+                </div>
+
+                <div class="field">
+                  <label for="event-description">Description</label>
+                  <textarea
+                    id="event-description"
+                    name="description"
+                    rows="5"
+                    maxlength="500"
+                    aria-describedby="event-description-help event-description-error"
+                    required
+                  ></textarea>
+                  <p class="field-help" id="event-description-help">
+                    Keep it concise. Attendees should understand the event at a glance.
+                  </p>
+                  <p
+                    class="field-error"
+                    id="event-description-error"
+                    data-error-for="description"
+                    hidden
+                  ></p>
+                </div>
+              </div>
+            </section>
+
+            <section class="form-section" aria-labelledby="schedule-title">
+              <div class="form-heading">
+                <h2 id="schedule-title">Schedule and place</h2>
+                <p>Times use the Asia/Manila time zone.</p>
+              </div>
+
+              <div class="form-fields">
+                <div class="field-row">
+                  <div class="field">
+                    <label for="event-date">Date</label>
+                    <input
+                      id="event-date"
+                      name="date"
+                      type="date"
+                      aria-describedby="event-date-error"
+                      required
+                    />
+                    <p class="field-error" id="event-date-error" data-error-for="date" hidden></p>
+                  </div>
+
+                  <div class="field">
+                    <label for="event-time">Time</label>
+                    <input
+                      id="event-time"
+                      name="time"
+                      type="time"
+                      aria-describedby="event-time-error"
+                      required
+                    />
+                    <p class="field-error" id="event-time-error" data-error-for="time" hidden></p>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for="event-venue">Venue</label>
+                  <input
+                    id="event-venue"
+                    name="venue"
+                    type="text"
+                    maxlength="120"
+                    aria-describedby="event-venue-error"
+                    required
+                  />
+                  <p class="field-error" id="event-venue-error" data-error-for="venue" hidden></p>
+                </div>
+              </div>
+            </section>
+
+            <section class="form-section" aria-labelledby="access-title">
+              <div class="form-heading">
+                <h2 id="access-title">Registration</h2>
+                <p>Set capacity and decide whether attendees can see the event.</p>
+              </div>
+
+              <div class="form-fields">
+                <div class="field-row field-row-access">
+                  <div class="field">
+                    <label for="event-capacity">Capacity</label>
+                    <input
+                      id="event-capacity"
+                      name="capacity"
+                      type="number"
+                      inputmode="numeric"
+                      min="1"
+                      step="1"
+                      aria-describedby="event-capacity-error"
+                      required
+                    />
+                    <p
+                      class="field-error"
+                      id="event-capacity-error"
+                      data-error-for="capacity"
+                      hidden
+                    ></p>
+                  </div>
+
+                  <div class="field">
+                    <label for="event-status">Status</label>
+                    <select
+                      id="event-status"
+                      name="status"
+                      aria-describedby="event-status-help event-status-error"
+                      required
+                    >
+                      <option value="draft">Draft</option>
+                      <option value="published">Published</option>
+                      <option value="closed">Closed</option>
+                    </select>
+                    <p class="field-help" id="event-status-help">
+                      Choose how attendees can access this event.
+                    </p>
+                    <p
+                      class="field-error"
+                      id="event-status-error"
+                      data-error-for="status"
+                      hidden
+                    ></p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <div class="form-actions">
+              <a class="button button-secondary" href="#events">Cancel</a>
+              <button class="button button-primary" type="submit" data-editor-submit>
+                Create event
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <section
+          class="view"
+          data-view="registrations"
+          aria-labelledby="registrations-title"
+          hidden
+        >
+          <header class="page-header">
+            <div>
+              <p class="eyebrow">Workspace</p>
+              <h1 id="registrations-title">Registrations</h1>
+              <p class="page-description">
+                Review attendee details and registration status by event.
+              </p>
+            </div>
+          </header>
+
+          <div
+            class="registrations-region"
+            data-registrations-region
+            aria-live="polite"
+            aria-busy="true"
+          >
+            <ol class="registration-list" data-registrations-list hidden></ol>
+
+            <div class="empty-state" data-registrations-empty hidden>
+              <span class="empty-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM16 11l2 2 4-4" />
+                </svg>
+              </span>
+              <h2>No registrations yet</h2>
+              <p>Completed registrations will appear here.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" data-view="register" aria-labelledby="register-title" hidden>
+          <header class="page-header">
+            <div>
+              <p class="eyebrow">Event registration</p>
+              <h1 id="register-title">Your event invitation</h1>
+              <p class="page-description">
+                Open the registration link shared with you by the event manager.
+              </p>
+            </div>
+          </header>
+
+          <div
+            class="public-region"
+            data-public-region
+            aria-live="polite"
+            aria-busy="true"
+          >
+            <ol class="public-list" data-public-list hidden></ol>
+
+            <div class="empty-state" data-public-empty hidden>
+              <span class="empty-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <circle cx="11" cy="11" r="7" />
+                  <path d="m20 20-4-4" />
+                </svg>
+              </span>
+              <h2>No open events</h2>
+              <p>Check back when a new event is published.</p>
+            </div>
+          </div>
+        </section>
+
+        <section
+          class="view"
+          data-view="form"
+          data-ready="false"
+          aria-labelledby="registration-title"
+          hidden
+        >
+          <header class="page-header">
+            <div>
+              <a class="back-link" href="#register">Available events</a>
+              <h1 id="registration-title" data-registration-title>
+                Register for an event
+              </h1>
+              <p class="page-description" data-registration-description>
+                Enter the attendee details for one place.
+              </p>
+            </div>
+          </header>
+
+          <div class="registration-layout">
+            <div data-registration-context></div>
+
+            <div class="registration-stage" data-registration-form-stage>
+              <form class="registration-form" data-registration-form novalidate>
+                <div class="field">
+                  <label for="attendee-name">Full name</label>
+                  <input
+                    id="attendee-name"
+                    name="attendeeName"
+                    type="text"
+                    autocomplete="name"
+                    maxlength="100"
+                    aria-describedby="attendee-name-error"
+                    required
+                  />
+                  <p
+                    class="field-error"
+                    id="attendee-name-error"
+                    data-registration-error-for="attendeeName"
+                    hidden
+                  ></p>
+                </div>
+
+                <div class="field">
+                  <label for="attendee-email">Email address</label>
+                  <input
+                    id="attendee-email"
+                    name="email"
+                    type="email"
+                    autocomplete="email"
+                    maxlength="254"
+                    aria-describedby="attendee-email-help attendee-email-error"
+                    required
+                  />
+                  <p class="field-help" id="attendee-email-help">
+                    Used only to identify this sample registration. No email is sent.
+                  </p>
+                  <p
+                    class="field-error"
+                    id="attendee-email-error"
+                    data-registration-error-for="email"
+                    hidden
+                  ></p>
+                </div>
+
+                <div class="form-actions registration-form-actions">
+                  <button class="button button-primary" type="submit">
+                    Review registration
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <section
+              class="registration-stage"
+              data-registration-review
+              tabindex="-1"
+              aria-labelledby="review-title"
+              hidden
+            >
+              <h2 class="registration-stage-title" id="review-title">Check your details</h2>
+              <p class="registration-stage-copy">
+                This reserves one place. Return to edit anything that is incorrect.
+              </p>
+              <p
+                class="form-error"
+                role="alert"
+                data-registration-review-error
+                hidden
+              ></p>
+              <div data-registration-summary></div>
+              <div class="form-actions registration-form-actions">
+                <button
+                  class="button button-secondary"
+                  type="button"
+                  data-registration-edit
+                >
+                  Edit information
+                </button>
+                <button
+                  class="button button-primary"
+                  type="button"
+                  data-registration-confirm
+                >
+                  Confirm registration
+                </button>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section
+          class="view"
+          data-view="confirmation"
+          data-ready="false"
+          aria-labelledby="confirmation-title"
+          hidden
+        >
+          <header class="page-header confirmation-header">
+            <div>
+              <p class="eyebrow">Registration complete</p>
+              <h1 id="confirmation-title">You're registered</h1>
+              <p class="page-description">
+                Your place is confirmed.
+              </p>
+            </div>
+          </header>
+
+          <div class="confirmation-panel">
+            <div data-confirmation-summary></div>
+            <p class="confirmation-note">
+              This demonstration does not send email and resets when the page refreshes.
+            </p>
+            <div class="confirmation-actions">
+              <a class="button button-secondary" href="#register">Browse events</a>
+              <button class="button button-primary" type="button" data-register-again>
+                Register another attendee
+              </button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
