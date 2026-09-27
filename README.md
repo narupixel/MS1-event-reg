@@ -155,5 +155,5 @@ frontend/
 
 ## Repository
 
-- [GitHub repository](https://github.com/jatsia/event-reg-final)
+- [Demo page](https://narupixel.github.io/MS1-event-reg/)
 - [Issues](https://github.com/jatsia/event-reg-final/issues)
